@@ -50,7 +50,15 @@ const Home = () => {
             </div>
 
             <main className="main-content">
-                <h1 className="section-title">Premium Sports Gear</h1>
+                <section className="hero-section">
+                    <div className="hero-content">
+                        <h1 className="hero-title">Elevate Your Game</h1>
+                        <p className="hero-subtitle">Discover the pinnacle of sports performance with our curated collection of elite sporting equipment, engineered for champions.</p>
+                        <button className="btn hero-btn" onClick={() => productSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}>
+                            Explore Collection
+                        </button>
+                    </div>
+                </section>
 
                 <div className="search-container">
                     <span className="search-icon">🔍</span>
@@ -63,6 +71,29 @@ const Home = () => {
                         onKeyDown={handleSearchCheck}
                     />
                 </div>
+
+                <section className="features-grid" id="features">
+                    <div className="feature-item">
+                        <span className="feature-icon">🚚</span>
+                        <h3>Global Shipping</h3>
+                        <p>Free express shipping on all orders over $99</p>
+                    </div>
+                    <div className="feature-item">
+                        <span className="feature-icon">🛡️</span>
+                        <h3>Secure Payment</h3>
+                        <p>100% secure payment processing with top-tier encryption</p>
+                    </div>
+                    <div className="feature-item">
+                        <span className="feature-icon">🎧</span>
+                        <h3>Expert Support</h3>
+                        <p>24/7 dedicated support from sports equipment specialists</p>
+                    </div>
+                    <div className="feature-item">
+                        <span className="feature-icon">🏆</span>
+                        <h3>Elite Quality</h3>
+                        <p>Every product is hand-selected and rigorously tested</p>
+                    </div>
+                </section>
 
                 <div className="section-divider" ref={productSectionRef}>
                     <span className="divider-line"></span>

@@ -10,7 +10,11 @@ services:
         value: 18.17.0
       - key: MONGODB_URI
         sync: false
+      - key: MONGO_URI
+        sync: false
       - key: JWT_SECRET
+        sync: false
+      - key: FAST2SMS_API_KEY
         sync: false
   - type: web
     name: sports-line-frontend

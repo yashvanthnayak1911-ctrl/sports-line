@@ -6,6 +6,8 @@ import API_URL from '../config';
 
 const AdminDashboard = () => {
     const [products, setProducts] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editId, setEditId] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -62,6 +64,19 @@ const AdminDashboard = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const resetForm = () => {
+        setFormData({
+            name: '',
+            description: '',
+            price: '',
+            imageUrl: '',
+            category: '',
+            countInStock: ''
+        });
+        setIsEditing(false);
+        setEditId(null);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -71,18 +86,16 @@ const AdminDashboard = () => {
                     Authorization: `Bearer ${userInfo.token}`,
                 },
             };
-            await axios.post(`${API_URL}/api/products`, formData, config);
 
-            alert('Product Added Successfully!');
+            if (isEditing) {
+                await axios.put(`${API_URL}/api/products/${editId}`, formData, config);
+                alert('Product Updated Successfully!');
+            } else {
+                await axios.post(`${API_URL}/api/products`, formData, config);
+                alert('Product Added Successfully!');
+            }
 
-            setFormData({
-                name: '',
-                description: '',
-                price: '',
-                imageUrl: '',
-                category: '',
-                countInStock: ''
-            });
+            resetForm();
             fetchProducts();
         } catch (error) {
             console.error(error);
@@ -92,8 +105,22 @@ const AdminDashboard = () => {
                 window.location.href = '/login';
                 return;
             }
-            alert('Failed to add product. Error: ' + (error.response?.data?.message || error.message));
+            alert('Operation failed. Error: ' + (error.response?.data?.message || error.message));
         }
+    };
+
+    const editHandler = (product) => {
+        setFormData({
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            imageUrl: product.imageUrl,
+            category: product.category,
+            countInStock: product.countInStock
+        });
+        setIsEditing(true);
+        setEditId(product._id);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const deleteHandler = async (id) => {
@@ -125,9 +152,9 @@ const AdminDashboard = () => {
                     <div className="section-title">Admin Dashboard</div>
 
                     <div className="admin-grid">
-                        {/* Add Product Card */}
+                        {/* Add/Edit Product Card */}
                         <div className="admin-card">
-                            <h2 className="card-title">Add New Product</h2>
+                            <h2 className="card-title">{isEditing ? 'Edit Product' : 'Add New Product'}</h2>
                             <form onSubmit={handleSubmit} className="admin-form">
                                 <div className="form-grid">
                                     <div className="form-group">
@@ -155,7 +182,16 @@ const AdminDashboard = () => {
                                         <textarea name="description" value={formData.description} onChange={handleChange} className="form-control" rows="3" placeholder="Product details..." required />
                                     </div>
                                 </div>
-                                <button type="submit" className="btn btn-primary">Add Product</button>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
+                                        {isEditing ? 'Update Product' : 'Add Product'}
+                                    </button>
+                                    {isEditing && (
+                                        <button type="button" className="btn btn-outline" onClick={resetForm} style={{ flex: 1, borderColor: 'rgba(255,255,255,0.2)', color: 'white' }}>
+                                            Cancel Edit
+                                        </button>
+                                    )}
+                                </div>
                             </form>
                         </div>
 
@@ -181,7 +217,10 @@ const AdminDashboard = () => {
                                                     <td>{product.name}</td>
                                                     <td>${product.price}</td>
                                                     <td><span className="badge">{product.category}</span></td>
-                                                    <td>
+                                                    <td style={{ display: 'flex', gap: '0.5rem' }}>
+                                                        <button className="btn-icon" onClick={() => editHandler(product)} style={{ background: 'rgba(56, 189, 248, 0.1)', color: 'var(--accent-color)', border: '1px solid rgba(56, 189, 248, 0.2)', padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
+                                                            Edit
+                                                        </button>
                                                         <button className="btn-icon delete" onClick={() => deleteHandler(product._id)}>
                                                             Delete
                                                         </button>

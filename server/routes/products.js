@@ -76,6 +76,32 @@ router.post('/', protect, admin, async (req, res) => {
     }
 });
 
+// PUT (Update) a product (Admin only)
+router.put('/:id', protect, admin, async (req, res) => {
+    const { name, description, price, imageUrl, category, countInStock } = req.body;
+
+    try {
+        const product = await Product.findById(req.params.id);
+
+        if (product) {
+            product.name = name || product.name;
+            product.description = description || product.description;
+            product.price = price !== undefined ? price : product.price;
+            product.imageUrl = imageUrl || product.imageUrl;
+            product.category = category || product.category;
+            product.countInStock = countInStock !== undefined ? countInStock : product.countInStock;
+
+            const updatedProduct = await product.save();
+            res.json(updatedProduct);
+        } else {
+            res.status(404).json({ message: 'Product not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 // DELETE a product (Admin only)
 router.delete('/:id', protect, admin, async (req, res) => {
     try {

@@ -1,0 +1,18 @@
+Atlas connection failed, falling back to In-Memory (Non-Persistent): querySrv ECONNREFUSED _mongodb._tcp.cluster0.u27e8qb.mongodb.net
+CRITICAL: Failed to start server: Error: Cannot find module 'mongodb-memory-server'
+Require stack:
+- C:\Users\yashv\OneDrive\Desktop\sports-line\server\server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1421:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1059:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1064:22)
+    at Module._load (node:internal/modules/cjs/loader:1227:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.require (node:internal/modules/cjs/loader:1504:12)
+    at require (node:internal/modules/helpers:152:16)
+    at startServer (C:\Users\yashv\OneDrive\Desktop\sports-line\server\server.js:37:43) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\yashv\\OneDrive\\Desktop\\sports-line\\server\\server.js'
+  ]
+}

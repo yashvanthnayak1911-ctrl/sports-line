@@ -1,0 +1,6 @@
+[dotenv@17.3.1] injecting env (3) from server\.env -- tip: ⚙️  enable debug logging with { debug: true }
+Atlas connection failed, falling back to In-Memory (Non-Persistent): querySrv ECONNREFUSED _mongodb._tcp.cluster0.u27e8qb.mongodb.net
+Connected to In-Memory MongoDB (Fallback)
+Admin user created: 9999999999
+Fallback: Database seeded with emergency products
+Server running on port 5000
