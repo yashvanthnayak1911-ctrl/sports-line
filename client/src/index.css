@@ -44,6 +44,15 @@ a {
   border-bottom: 1px solid var(--glass-border);
 }
 
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+    flex-wrap: wrap;
+    /* allow wrapping if links don't fit */
+    gap: 1rem;
+  }
+}
+
 /* Navbar Brand - Classy & Minimal */
 .nav-brand {
   font-size: 1.8rem;
@@ -75,6 +84,13 @@ a {
 .nav-links {
   display: flex;
   gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    gap: 0.5rem;
+    /* Shrink space between links on narrow screens */
+  }
 }
 
 .nav-link {
@@ -198,12 +214,25 @@ a {
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1.5rem 1rem;
+    /* Less blank side margin on phones */
+  }
+}
+
 /* Hero Section */
 .hero-section {
   padding: 8rem 2rem 4rem;
   text-align: center;
   position: relative;
   z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 4rem 1rem 2rem;
+  }
 }
 
 .hero-title {
@@ -433,6 +462,14 @@ a {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    /* allow 2 columns on mobile */
+    gap: 1rem;
+  }
 }
 
 /* Product Card */
@@ -793,6 +830,13 @@ a {
   }
 }
 
+@media (max-width: 768px) {
+  .admin-card {
+    padding: 1.5rem;
+    /* Shrink generic large card paddings */
+  }
+}
+
 .form-group.full-width {
   grid-column: 1 / -1;
 }
@@ -840,6 +884,9 @@ textarea.form-control {
 /* Admin Table */
 .table-responsive {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scroll on iOS */
+  margin-bottom: 1rem;
 }
 
 .admin-table {
@@ -847,6 +894,8 @@ textarea.form-control {
   border-collapse: separate;
   border-spacing: 0;
   text-align: left;
+  min-width: 600px;
+  /* Force scroll on very narrow devices if columns can't fit */
 }
 
 .admin-table th {
@@ -1157,6 +1206,15 @@ textarea.form-control {
   }
 }
 
+@media (max-width: 768px) {
+  .product-details-container {
+    padding: 1.5rem;
+    /* Shrink the outer padding significantly */
+    gap: 1.5rem;
+    /* Shrink gap between image and text */
+  }
+}
+
 .product-details-image {
   width: 100%;
   height: 400px;
@@ -1170,6 +1228,14 @@ textarea.form-control {
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .product-details-image {
+    height: 250px;
+    /* Don't stretch mobile pages */
+    padding: 1rem;
+  }
 }
 
 .product-details-image:hover {
@@ -1219,6 +1285,12 @@ textarea.form-control {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .details-title {
+    font-size: 1.8rem;
+  }
 }
 
 .details-category {
@@ -1332,6 +1404,13 @@ textarea.form-control {
   width: 100%;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
   animation: fadeIn 1s ease-out;
+}
+
+@media (max-width: 768px) {
+  .gateway-card {
+    padding: 2.5rem 1.5rem;
+    /* Drastically reduce padding */
+  }
 }
 
 .brand-logo-container {
@@ -1473,16 +1552,22 @@ textarea.form-control {
 
 @media (max-width: 768px) {
   .gateway-card {
-    padding: 3rem 2rem;
+    padding: 2.5rem 1.5rem;
+    /* Further reduction overrides the default */
   }
 
   .gateway-brand {
-    font-size: 3rem;
+    font-size: 2.5rem;
+  }
+
+  .gateway-tagline {
+    font-size: 1.1rem;
   }
 
   .gateway-features {
-    gap: 2rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
+    /* Keep it responsive */
   }
 }
 
