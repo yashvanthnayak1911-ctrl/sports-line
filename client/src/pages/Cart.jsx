@@ -48,63 +48,58 @@ const Cart = () => {
                 <h1 className="section-title">Your Shopping Cart</h1>
 
                 {cartItems.length === 0 ? (
-                    <div style={{ textAlign: 'center', color: 'white', marginTop: '3rem' }}>
-                        <h2>Your cart is empty</h2>
-                        <button
-                            className="btn"
-                            style={{ marginTop: '1rem' }}
-                            onClick={() => navigate('/')}
-                        >
-                            Go Shopping
+                    <div className="empty-cart-container">
+                        <div className="empty-cart-icon">🛒</div>
+                        <h2 className="empty-cart-title">Your cart is empty</h2>
+                        <p className="empty-cart-subtitle">Looks like you haven't added anything to your cart yet.</p>
+                        <button className="btn empty-cart-btn" onClick={() => navigate('/')}>
+                            Continue Shopping
                         </button>
                     </div>
                 ) : (
-                    <div className="cart-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-                        {cartItems.map((item, index) => (
-                            <div key={item._id || index} className="cart-item" style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                background: 'rgba(255,255,255,0.1)',
-                                padding: '1rem',
-                                marginBottom: '1rem',
-                                borderRadius: '8px'
-                            }}>
-                                <img
-                                    src={item.imageUrl}
-                                    alt={item.name}
-                                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }}
-                                />
-                                <div style={{ flex: 1, marginLeft: '1rem', color: 'white' }}>
-                                    <h3>{item.name}</h3>
-                                    <p>${item.price}</p>
-                                    <div className="cart-qty-controls" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
-                                        <button className="qty-btn" onClick={() => updateQuantity(item._id, (item.qty || 1) - 1)}>-</button>
-                                        <span>{item.qty || 1}</span>
-                                        <button className="qty-btn" onClick={() => updateQuantity(item._id, (item.qty || 1) + 1)}>+</button>
+                    <div className="cart-page-container">
+                        <div className="cart-items-section">
+                            {cartItems.map((item, index) => (
+                                <div key={item._id || index} className="cart-item-card">
+                                    <img
+                                        src={item.imageUrl}
+                                        alt={item.name}
+                                        className="cart-item-image"
+                                    />
+                                    <div className="cart-item-details">
+                                        <h3 className="cart-item-title">{item.name}</h3>
+                                        <p className="cart-item-price">${item.price}</p>
+                                        <div className="cart-item-actions">
+                                            <div className="cart-qty-wrapper">
+                                                <button className="qty-btn" onClick={() => updateQuantity(item._id, (item.qty || 1) - 1)}>-</button>
+                                                <span className="qty-text">{item.qty || 1}</span>
+                                                <button className="qty-btn" onClick={() => updateQuantity(item._id, (item.qty || 1) + 1)}>+</button>
+                                            </div>
+                                            <button className="cart-remove-btn" onClick={() => removeFromCart(item._id)}>
+                                                Remove
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <button
-                                    className="btn"
-                                    style={{ background: '#ef4444', padding: '0.5rem 1rem', width: 'auto' }}
-                                    onClick={() => removeFromCart(item._id)}
-                                >
-                                    Remove
-                                </button>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
 
-                        <div className="cart-summary" style={{
-                            marginTop: '2rem',
-                            padding: '1.5rem',
-                            background: 'rgba(255,255,255,0.15)',
-                            borderRadius: '12px',
-                            color: 'white',
-                            textAlign: 'right'
-                        }}>
-                            <h2 style={{ marginBottom: '1rem' }}>Total: ${calculateTotal()}</h2>
+                        <div className="cart-summary-card">
+                            <h2 className="cart-summary-title">Order Summary</h2>
+                            <div className="cart-summary-row">
+                                <span>Subtotal</span>
+                                <span>${calculateTotal()}</span>
+                            </div>
+                            <div className="cart-summary-row">
+                                <span>Shipping</span>
+                                <span>Free</span>
+                            </div>
+                            <div className="cart-summary-total">
+                                <span>Total</span>
+                                <span>${calculateTotal()}</span>
+                            </div>
                             <button
-                                className="btn"
-                                style={{ fontSize: '1.2rem', padding: '1rem 2rem' }}
+                                className="btn cart-checkout-btn"
                                 onClick={() => navigate('/checkout')}
                             >
                                 Proceed to Checkout
