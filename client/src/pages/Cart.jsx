@@ -7,19 +7,38 @@ const Cart = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const items = JSON.parse(localStorage.getItem('cartItems')) || [];
-        setCartItems(items);
+        try {
+            const items = JSON.parse(localStorage.getItem('cartItems')) || [];
+            setCartItems(items);
+        } catch (error) {
+            console.error("Error parsing cart items:", error);
+            localStorage.removeItem('cartItems');
+            setCartItems([]);
+        }
     }, []);
 
     const removeFromCart = (id) => {
         const newItems = cartItems.filter(item => item._id !== id);
         setCartItems(newItems);
         localStorage.setItem('cartItems', JSON.stringify(newItems));
-        window.dispatchEvent(new Event("storage")); // Notify Navbar
+        window.dispatchEvent(new Event("cart-updated")); // Notify Navbar
     };
 
     const calculateTotal = () => {
-        return cartItems.reduce((acc, item) => acc + Number(item.price), 0).toFixed(2);
+        return cartItems.reduce((acc, item) => acc + (Number(item.price) * (item.qty || 1)), 0).toFixed(2);
+    };
+
+    const updateQuantity = (id, newQty) => {
+        if (newQty < 1) {
+            removeFromCart(id);
+            return;
+        }
+        const newItems = cartItems.map(item =>
+            item._id === id ? { ...item, qty: newQty } : item
+        );
+        setCartItems(newItems);
+        localStorage.setItem('cartItems', JSON.stringify(newItems));
+        window.dispatchEvent(new Event("cart-updated"));
     };
 
     return (
@@ -42,7 +61,7 @@ const Cart = () => {
                 ) : (
                     <div className="cart-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
                         {cartItems.map((item, index) => (
-                            <div key={index} className="cart-item" style={{
+                            <div key={item._id || index} className="cart-item" style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 background: 'rgba(255,255,255,0.1)',
@@ -58,10 +77,15 @@ const Cart = () => {
                                 <div style={{ flex: 1, marginLeft: '1rem', color: 'white' }}>
                                     <h3>{item.name}</h3>
                                     <p>${item.price}</p>
+                                    <div className="cart-qty-controls" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                        <button className="qty-btn" onClick={() => updateQuantity(item._id, (item.qty || 1) - 1)}>-</button>
+                                        <span>{item.qty || 1}</span>
+                                        <button className="qty-btn" onClick={() => updateQuantity(item._id, (item.qty || 1) + 1)}>+</button>
+                                    </div>
                                 </div>
                                 <button
                                     className="btn"
-                                    style={{ background: '#ef4444', padding: '0.5rem 1rem' }}
+                                    style={{ background: '#ef4444', padding: '0.5rem 1rem', width: 'auto' }}
                                     onClick={() => removeFromCart(item._id)}
                                 >
                                     Remove

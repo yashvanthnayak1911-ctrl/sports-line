@@ -6,6 +6,8 @@ import API_URL from '../config';
 
 const AdminDashboard = () => {
     const [products, setProducts] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [users, setUsers] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
     const [formData, setFormData] = useState({
@@ -36,8 +38,52 @@ const AdminDashboard = () => {
             navigate('/login');
         } else {
             fetchProducts();
+            fetchOrders();
+            fetchUsers();
         }
     }, [navigate]);
+
+    const fetchUsers = async () => {
+        try {
+            const { data } = await axios.get(`${API_URL}/api/auth/users`);
+            setUsers(data);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    };
+
+    const fetchOrders = async () => {
+        try {
+            const { data } = await axios.get(`${API_URL}/api/orders`);
+            setOrders(data);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    };
+
+    const payOrder = async (id) => {
+        if (window.confirm('Mark this order as paid?')) {
+            try {
+                await axios.put(`${API_URL}/api/orders/${id}/pay`);
+                fetchOrders();
+            } catch (error) {
+                console.error('Error updating payment status:', error);
+                alert('Failed to update payment status');
+            }
+        }
+    };
+
+    const deleteOrder = async (id) => {
+        if (window.confirm('Are you sure you want to delete this order?')) {
+            try {
+                await axios.delete(`${API_URL}/api/orders/${id}`);
+                fetchOrders();
+            } catch (error) {
+                console.error('Error deleting order:', error);
+                alert('Failed to delete order');
+            }
+        }
+    };
 
     const fetchProducts = async () => {
         try {
@@ -149,7 +195,41 @@ const AdminDashboard = () => {
             <AdminNavbar />
             <div className="page-wrapper">
                 <div className="main-content">
-                    <div className="section-title">Admin Dashboard</div>
+                    <div className="section-title">Admin Dashboard Overview</div>
+
+                    {/* Stats Grid */}
+                    <div className="admin-grid" style={{ marginBottom: '3rem' }}>
+                        <div className="admin-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', borderLeft: '4px solid var(--accent-color)' }}>
+                            <div style={{ fontSize: '2rem', background: 'rgba(56, 189, 248, 0.1)', padding: '1rem', borderRadius: '12px' }}>💰</div>
+                            <div>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0 }}>Total Revenue</p>
+                                <h3 style={{ color: 'white', margin: '0.2rem 0', fontSize: '1.5rem' }}>
+                                    ${orders.reduce((acc, item) => acc + (item.isPaid ? item.totalPrice : 0), 0).toFixed(2)}
+                                </h3>
+                            </div>
+                        </div>
+                        <div className="admin-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', borderLeft: '4px solid #34d399' }}>
+                            <div style={{ fontSize: '2rem', background: 'rgba(52, 211, 153, 0.1)', padding: '1rem', borderRadius: '12px' }}>📦</div>
+                            <div>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0 }}>Total Orders</p>
+                                <h3 style={{ color: 'white', margin: '0.2rem 0', fontSize: '1.5rem' }}>{orders.length}</h3>
+                            </div>
+                        </div>
+                        <div className="admin-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', borderLeft: '4px solid #f87171' }}>
+                            <div style={{ fontSize: '2rem', background: 'rgba(248, 113, 113, 0.1)', padding: '1rem', borderRadius: '12px' }}>👥</div>
+                            <div>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0 }}>Total Users</p>
+                                <h3 style={{ color: 'white', margin: '0.2rem 0', fontSize: '1.5rem' }}>{users.length}</h3>
+                            </div>
+                        </div>
+                        <div className="admin-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', borderLeft: '4px solid #fbbf24' }}>
+                            <div style={{ fontSize: '2rem', background: 'rgba(251, 191, 36, 0.1)', padding: '1rem', borderRadius: '12px' }}>🏗️</div>
+                            <div>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0 }}>Total Products</p>
+                                <h3 style={{ color: 'white', margin: '0.2rem 0', fontSize: '1.5rem' }}>{products.length}</h3>
+                            </div>
+                        </div>
+                    </div>
 
                     <div className="admin-grid">
                         {/* Add/Edit Product Card */}
@@ -196,7 +276,7 @@ const AdminDashboard = () => {
                         </div>
 
                         {/* Product List Card */}
-                        <div className="admin-card">
+                        <div className="admin-card" id="inventory">
                             <h2 className="card-title">Inventory</h2>
                             <div className="table-responsive">
                                 <table className="admin-table">
@@ -231,6 +311,118 @@ const AdminDashboard = () => {
                                             <tr>
                                                 <td colSpan="5" style={{ textAlign: 'center', padding: '1rem', color: 'var(--text-secondary)' }}>
                                                     No products found. Add one above!
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Transaction List Section */}
+                    <div className="section-title" id="transactions" style={{ marginTop: '3rem' }}>Transaction Details</div>
+                    <div className="admin-grid" style={{ gridTemplateColumns: '1fr' }}>
+                        <div className="admin-card">
+                            <h2 className="card-title">All Orders</h2>
+                            <div className="table-responsive">
+                                <table className="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Total</th>
+                                            <th>Paid</th>
+                                            <th>Items</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {Array.isArray(orders) && orders.length > 0 ? (
+                                            orders.map((order) => (
+                                                <tr key={order._id}>
+                                                    <td>{String(order._id).substring(Math.max(0, String(order._id).length - 8))}</td>
+                                                    <td>
+                                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                            <span>{order.shippingAddress.firstName} {order.shippingAddress.lastName}</span>
+                                                            <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{order.shippingAddress.email}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                                                    <td>${order.totalPrice}</td>
+                                                    <td>
+                                                        <span className={`badge ${order.isPaid ? 'success' : 'warning'}`}>
+                                                            {order.isPaid ? 'Yes' : 'No'}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div style={{ fontSize: '0.8rem' }}>
+                                                            {order.orderItems.map((item, idx) => (
+                                                                <div key={idx}>{item.name} (x{item.qty})</div>
+                                                            ))}
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ display: 'flex', gap: '0.5rem' }}>
+                                                        {!order.isPaid && (
+                                                            <button className="btn-icon" onClick={() => payOrder(order._id)} style={{ background: 'rgba(52, 211, 153, 0.1)', color: '#34d399', border: '1px solid rgba(52, 211, 153, 0.2)', padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>
+                                                                Pay
+                                                            </button>
+                                                        )}
+                                                        <button className="btn-icon delete" onClick={() => deleteOrder(order._id)} style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>
+                                                            Delete
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="7" style={{ textAlign: 'center', padding: '1rem', color: 'var(--text-secondary)' }}>
+                                                    No transactions found.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* User Management Section */}
+                    <div className="section-title" id="users" style={{ marginTop: '3rem' }}>User Management</div>
+                    <div className="admin-grid" style={{ gridTemplateColumns: '1fr' }}>
+                        <div className="admin-card">
+                            <h2 className="card-title">Registered Users</h2>
+                            <div className="table-responsive">
+                                <table className="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Username</th>
+                                            <th>Mobile Number</th>
+                                            <th>Role</th>
+                                            <th>Joined At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {Array.isArray(users) && users.length > 0 ? (
+                                            users.map((user) => (
+                                                <tr key={user._id}>
+                                                    <td>{String(user._id).substring(Math.max(0, String(user._id).length - 6))}</td>
+                                                    <td>{user.username}</td>
+                                                    <td>{user.mobileNumber}</td>
+                                                    <td>
+                                                        <span className={`badge ${user.isAdmin ? 'accent' : ''}`}>
+                                                            {user.isAdmin ? 'Admin' : 'User'}
+                                                        </span>
+                                                    </td>
+                                                    <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="5" style={{ textAlign: 'center', padding: '1rem', color: 'var(--text-secondary)' }}>
+                                                    No users found.
                                                 </td>
                                             </tr>
                                         )}

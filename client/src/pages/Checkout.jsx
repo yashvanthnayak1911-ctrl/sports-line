@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
+import API_URL from '../config';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -16,35 +17,92 @@ const Checkout = () => {
     });
 
     useEffect(() => {
-        const items = JSON.parse(localStorage.getItem('cartItems')) || [];
-        setCartItems(items);
-        if (items.length === 0) {
+        try {
+            const items = JSON.parse(localStorage.getItem('cartItems')) || [];
+            setCartItems(items);
+            if (items.length === 0) {
+                navigate('/cart');
+            }
+        } catch (error) {
+            console.error("Error parsing cart items:", error);
+            localStorage.removeItem('cartItems');
             navigate('/cart');
         }
     }, [navigate]);
 
     const calculateTotal = () => {
-        return cartItems.reduce((acc, item) => acc + Number(item.price), 0).toFixed(2);
+        return cartItems.reduce((acc, item) => acc + (Number(item.price) * (item.qty || 1)), 0).toFixed(2);
+    };
+
+    const updateQuantity = (id, newQty) => {
+        if (newQty < 1) {
+            const newItems = cartItems.filter(item => item._id !== id);
+            setCartItems(newItems);
+            localStorage.setItem('cartItems', JSON.stringify(newItems));
+            if (newItems.length === 0) {
+                navigate('/cart');
+            }
+        } else {
+            const newItems = cartItems.map(item =>
+                item._id === id ? { ...item, qty: newQty } : item
+            );
+            setCartItems(newItems);
+            localStorage.setItem('cartItems', JSON.stringify(newItems));
+        }
+        window.dispatchEvent(new Event("cart-updated"));
     };
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handlePlaceOrder = (e) => {
+    const handlePlaceOrder = async (e) => {
         e.preventDefault();
-        // Simulate order placement
-        alert('Order Placed Successfully! Thank you for shopping with SportsLine.');
-        localStorage.removeItem('cartItems');
-        window.dispatchEvent(new Event("cart-updated"));
-        navigate('/');
+
+        try {
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            const orderData = {
+                orderItems: cartItems.map(item => ({
+                    name: item.name,
+                    qty: item.qty || 1,
+                    image: item.imageUrl || item.image,
+                    price: item.price,
+                    product: item._id
+                })),
+                shippingAddress: formData,
+                paymentMethod: 'Credit Card',
+                totalPrice: calculateTotal(),
+                user: userInfo ? userInfo._id : null
+            };
+
+            const response = await fetch(`${API_URL}/api/orders`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            if (response.ok) {
+                alert('Order Placed Successfully! Thank you for shopping with SportsLine.');
+                localStorage.removeItem('cartItems');
+                window.dispatchEvent(new Event("cart-updated"));
+                navigate('/');
+            } else {
+                const errorData = await response.json();
+                alert('Failed to place order: ' + (errorData.message || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Error placing order:', error);
+            alert('An error occurred while placing your order. Please try again.');
+        }
     };
 
     return (
         <div className="page-wrapper">
             <Navbar />
             <div className="main-content">
-                <h1 className="section-title">Checkout</h1>
+                <h1 className="section-title">Checkout <span style={{ color: '#facc15', fontSize: '1rem', background: 'rgba(250, 204, 21, 0.1)', padding: '4px 12px', borderRadius: '20px', border: '1px solid #facc15' }}>UPDATE APPLIED</span></h1>
 
                 <div className="checkout-container">
                     {/* Left Column: Billing Details */}
@@ -93,12 +151,26 @@ const Checkout = () => {
                     {/* Right Column: Order Summary */}
                     <div className="order-summary-section">
                         <div className="order-card">
-                            <h2 className="checkout-subtitle">Order Summary</h2>
+                            <h2 className="checkout-subtitle">Order Summary (Live)</h2>
                             <div className="summary-items">
                                 {cartItems.map((item, index) => (
-                                    <div key={index} className="summary-item">
-                                        <span>{item.name}</span>
-                                        <span>${item.price}</span>
+                                    <div key={item._id || index} className="summary-item">
+                                        <div className="summary-item-info">
+                                            <span className="summary-item-name">{item.name}</span>
+                                            <div className="summary-qty-controls" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(56, 189, 248, 0.2)', padding: '6px 12px', borderRadius: '8px', border: '1px solid #38bdf8', marginTop: '8px' }}>
+                                                <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase' }}>Qty:</span>
+                                                <button
+                                                    onClick={() => updateQuantity(item._id, (item.qty || 1) - 1)}
+                                                    style={{ background: '#38bdf8', color: '#0f172a', border: 'none', width: '32px', height: '32px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '18px', display: 'flex', alignItems: 'center', justifyCenter: 'center' }}
+                                                >-</button>
+                                                <span style={{ color: 'white', fontWeight: 'bold', fontSize: '16px', minWidth: '20px', textAlign: 'center' }}>{item.qty || 1}</span>
+                                                <button
+                                                    onClick={() => updateQuantity(item._id, (item.qty || 1) + 1)}
+                                                    style={{ background: '#38bdf8', color: '#0f172a', border: 'none', width: '32px', height: '32px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '18px', display: 'flex', alignItems: 'center', justifyCenter: 'center' }}
+                                                >+</button>
+                                            </div>
+                                        </div>
+                                        <span className="summary-item-price" style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '18px' }}>${(Number(item.price) * (item.qty || 1)).toFixed(2)}</span>
                                     </div>
                                 ))}
                             </div>

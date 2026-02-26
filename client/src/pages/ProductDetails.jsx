@@ -26,7 +26,15 @@ const ProductDetails = () => {
 
     const addToCart = () => {
         const currentCart = JSON.parse(localStorage.getItem('cartItems')) || [];
-        const updatedCart = [...currentCart, product];
+        const existingItem = currentCart.find(item => item._id === product._id);
+        let updatedCart;
+        if (existingItem) {
+            updatedCart = currentCart.map(item =>
+                item._id === product._id ? { ...item, qty: (item.qty || 1) + 1 } : item
+            );
+        } else {
+            updatedCart = [...currentCart, { ...product, qty: 1 }];
+        }
         localStorage.setItem('cartItems', JSON.stringify(updatedCart));
         window.dispatchEvent(new Event('cart-updated'));
         alert(`${product.name} added to cart!`);

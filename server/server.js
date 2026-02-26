@@ -16,29 +16,39 @@ app.use(cors());
 // Routes
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
+const orderRoutes = require('./routes/orders');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
     try {
-        let isFallback = false;
+        let connected = false;
+
         try {
             // Attempt Connect to MongoDB Atlas
             await mongoose.connect(process.env.MONGO_URI || process.env.MONGODB_URI);
             console.log('Connected to MongoDB Atlas (Persistent)');
+            connected = true;
         } catch (atlasError) {
-            console.error('Atlas connection failed, falling back to In-Memory (Non-Persistent):', atlasError.message);
-            isFallback = true;
+            console.error('Atlas connection failed, trying Local MongoDB...', atlasError.message);
 
-            // Fallback to In-Memory
-            const { MongoMemoryServer } = require('mongodb-memory-server');
-            const mongod = await MongoMemoryServer.create();
-            const uri = mongod.getUri();
-            await mongoose.connect(uri);
-            console.log('Connected to In-Memory MongoDB (Fallback)');
+            try {
+                // Attempt Connect to Local MongoDB
+                await mongoose.connect(process.env.LOCAL_MONGO_URI || 'mongodb://127.0.0.1:27017/sportsline');
+                console.log('Connected to Local MongoDB (Persistent)');
+                connected = true;
+            } catch (localError) {
+                console.error('Local connection failed too:', localError.message);
+            }
+        }
+
+        if (!connected) {
+            console.error('CRITICAL: No persistent database connection could be established. Please check your MongoDB Atlas connection string and ensure your Local MongoDB server is running.');
+            process.exit(1);
         }
 
         // Seed Admin User (Always needed)
@@ -52,47 +62,13 @@ const startServer = async () => {
             console.log('Admin user created: 9999999999');
         }
 
-        // Seed Products ONLY if in Fallback Mode (to prevent empty site on error)
-        if (isFallback) {
-            const productCount = await Product.countDocuments();
-            if (productCount === 0) {
-                const products = [
-                    {
-                        name: "Pro Court Tennis Racket",
-                        description: "Professional grade carbon fiber tennis racket for superior control and power. Engineered for competitive players seeking precision.",
-                        price: 199.99,
-                        imageUrl: "https://images.unsplash.com/photo-1617083934555-563d3cb0046e?q=80&w=1000&auto=format&fit=crop",
-                        category: "Rackets",
-                        countInStock: 10
-                    },
-                    {
-                        name: "Elite Basketball",
-                        description: "Official size and weight, superior grip composite leather basketball. Perfect for indoor and outdoor court performance.",
-                        price: 49.99,
-                        imageUrl: "https://images.unsplash.com/photo-1519861531473-920026393112?q=80&w=1000&auto=format&fit=crop",
-                        category: "Balls",
-                        countInStock: 20
-                    },
-                    {
-                        name: "Performance Running Shoes",
-                        description: "Ultra-lightweight running shoes with responsive cushioning technology. Designed for marathon runners and casual joggers alike.",
-                        price: 129.99,
-                        imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop",
-                        category: "Footwear",
-                        countInStock: 15
-                    }
-                ];
-                await Product.insertMany(products);
-                console.log('Fallback: Database seeded with emergency products');
-            }
-        }
-
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
 
     } catch (err) {
         console.error('CRITICAL: Failed to start server:', err);
+        process.exit(1);
     }
 };
 

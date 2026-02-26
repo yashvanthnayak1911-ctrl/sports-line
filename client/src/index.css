@@ -896,7 +896,6 @@ textarea.form-control {
   width: auto;
 }
 
-
 /* Checkout Page Styles */
 .checkout-container {
   display: grid;
@@ -975,9 +974,88 @@ textarea.form-control {
 .summary-item {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
   color: var(--text-secondary);
   font-size: 1rem;
+}
+
+.summary-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.summary-qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  /* Increased visibility */
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 0.25rem;
+}
+
+.qty-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-right: 0.25rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.qty-btn {
+  background: #38bdf8 !important;
+  /* Explicit blue color */
+  color: #0f172a !important;
+  border: none;
+  width: 28px;
+  /* Increased size */
+  height: 28px;
+  /* Increased size */
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1.1rem;
+  /* Bolder icon */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.qty-btn:hover {
+  transform: scale(1.1);
+  background: white !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.qty-btn:active {
+  transform: scale(0.9);
+}
+
+.qty-text {
+  color: white;
+  font-weight: 800;
+  font-size: 1rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+.summary-item-name {
+  font-weight: 600;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.summary-item-price {
+  font-weight: 700;
+  color: #38bdf8;
+  font-size: 1.1rem;
 }
 
 .summary-divider {
@@ -1221,4 +1299,189 @@ textarea.form-control {
 .back-btn:hover {
   color: white;
   transform: translateX(-5px);
+}
+
+/* Gateway Landing Page */
+.landing-gateway {
+  background-color: var(--primary-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gateway-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  padding: 4rem 2rem;
+  z-index: 10;
+}
+
+.gateway-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  padding: 5rem 4rem;
+  text-align: center;
+  max-width: 650px;
+  width: 100%;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+  animation: fadeIn 1s ease-out;
+}
+
+.brand-logo-container {
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.gateway-brand {
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  background: linear-gradient(135deg, #fff 0%, var(--accent-color) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.brand-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+  margin-top: 1rem;
+  opacity: 0.5;
+}
+
+.gateway-tagline {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: white;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.gateway-description {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 4rem;
+  font-weight: 300;
+}
+
+.gateway-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.gateway-btn {
+  padding: 1.25rem;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  border-radius: 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  display: block;
+}
+
+.gateway-btn.primary {
+  background: white;
+  color: var(--primary-bg);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+.gateway-btn.primary:hover {
+  transform: translateY(-3px);
+  background: var(--accent-color);
+  color: white;
+  box-shadow: 0 15px 40px rgba(56, 189, 248, 0.4);
+}
+
+.gateway-separator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.gateway-separator::before,
+.gateway-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--glass-border);
+}
+
+.gateway-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: white;
+}
+
+.gateway-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: white;
+  transform: translateY(-3px);
+}
+
+.gateway-footer {
+  margin-top: 4rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  opacity: 0.6;
+}
+
+.gateway-features {
+  display: flex;
+  justify-content: center;
+  gap: 6rem;
+  opacity: 0.8;
+}
+
+.g-feature {
+  text-align: center;
+}
+
+.g-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.g-feature h4 {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .gateway-card {
+    padding: 3rem 2rem;
+  }
+
+  .gateway-brand {
+    font-size: 3rem;
+  }
+
+  .gateway-features {
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
 }

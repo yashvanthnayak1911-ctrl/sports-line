@@ -72,4 +72,17 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// @desc    Get all users
+// @route   GET /api/auth/users
+// @access  Admin
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
 module.exports = router;

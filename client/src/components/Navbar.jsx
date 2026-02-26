@@ -81,6 +81,11 @@ const Navbar = () => {
                         Settings
                     </button>
                     <div className="dropdown-menu">
+                        <Link to="/admin" className="dropdown-item admin-link">
+                            <span className="dropdown-icon">🛠️</span>
+                            Admin Panel
+                        </Link>
+                        <div className="dropdown-divider"></div>
                         {user ? (
                             <>
                                 <div className="dropdown-header">
@@ -89,10 +94,21 @@ const Navbar = () => {
                                 </div>
                                 <div className="dropdown-divider"></div>
                                 {user.isAdmin && (
-                                    <Link to="/admin" className="dropdown-item admin-link">
-                                        <span className="dropdown-icon">🛠️</span>
-                                        Admin Panel
-                                    </Link>
+                                    <>
+                                        <Link to="/admin#inventory" className="dropdown-item">
+                                            <span className="dropdown-icon">📦</span>
+                                            Inventory
+                                        </Link>
+                                        <Link to="/admin#transactions" className="dropdown-item">
+                                            <span className="dropdown-icon">💰</span>
+                                            Transactions
+                                        </Link>
+                                        <Link to="/admin#users" className="dropdown-item">
+                                            <span className="dropdown-icon">👥</span>
+                                            Users
+                                        </Link>
+                                        <div className="dropdown-divider"></div>
+                                    </>
                                 )}
                                 <Link to="/orders" className="dropdown-item">
                                     <span className="dropdown-icon">📦</span>
