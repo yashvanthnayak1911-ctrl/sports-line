@@ -81,10 +81,12 @@ const Navbar = () => {
                         Settings
                     </button>
                     <div className="dropdown-menu">
-                        <Link to="/admin" className="dropdown-item admin-link">
-                            <span className="dropdown-icon">🛠️</span>
-                            Admin Panel
-                        </Link>
+                        {user && user.isAdmin && (
+                            <Link to="/admin" className="dropdown-item admin-link">
+                                <span className="dropdown-icon">🛠️</span>
+                                Admin Panel
+                            </Link>
+                        )}
                         <div className="dropdown-divider"></div>
                         {user ? (
                             <>

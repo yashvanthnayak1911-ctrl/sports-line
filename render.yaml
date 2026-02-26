@@ -3,24 +3,24 @@ services:
     name: sports-line-backend
     env: node
     plan: free
-    buildCommand: cd server && npm install
-    startCommand: node server/server.js
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
       - key: NODE_VERSION
         value: 18.17.0
-      - key: MONGODB_URI
-        sync: false
       - key: MONGO_URI
-        sync: false
+        value: mongodb+srv://Yashh-projects:yashthanu%40191104@cluster0.u27e8qb.mongodb.net/sports-line?retryWrites=true&w=majority&appName=Cluster0
       - key: JWT_SECRET
-        sync: false
+        value: your_jwt_secret_key_here
       - key: FAST2SMS_API_KEY
-        sync: false
+        value: iEyYOebFQhu0ImAq1tlZBxXLD8jG34fkovNzgcrHns52dUV7TpjhbVTcO8fp6iP2H0qFWGvXsnLyM3Zl
   - type: web
     name: sports-line-frontend
     env: static
+    rootDir: client
     buildCommand: npm install && npm run build
-    staticPublishPath: ./client/dist
+    staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
         fromService:

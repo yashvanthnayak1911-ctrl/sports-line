@@ -6,7 +6,10 @@ const User = require('./models/User');
 const Product = require('./models/Product');
 
 const path = require('path');
-dotenv.config({ path: path.join(__dirname, '.env') });
+// Only load .env if not in production (Render sets process.env.NODE_ENV = 'production')
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config({ path: path.join(__dirname, '.env') });
+}
 
 const app = express();
 
@@ -52,14 +55,15 @@ const startServer = async () => {
         }
 
         // Seed Admin User (Always needed)
-        const adminExists = await User.findOne({ mobileNumber: '9999999999' });
+        const adminExists = await User.findOne({ email: 'admin@sportsline.com' });
         if (!adminExists) {
             await User.create({
                 username: 'admin',
-                mobileNumber: '9999999999',
+                email: 'admin@sportsline.com',
+                password: 'adminpassword123',
                 isAdmin: true
             });
-            console.log('Admin user created: 9999999999');
+            console.log('Admin user created: admin@sportsline.com / adminpassword123');
         }
 
         app.listen(PORT, () => {
