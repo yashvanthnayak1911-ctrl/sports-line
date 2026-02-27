@@ -87,17 +87,18 @@ a {
 }
 
 .nav-link {
-  color: var(--text-primary);
+  color: var(--accent-color);
   font-weight: 500;
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid rgba(56, 189, 248, 0.1);
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0);
-  /* Transparent by default */
+  background: rgba(56, 189, 248, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -105,15 +106,19 @@ a {
 
 .nav-link:hover {
   color: var(--accent-color);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3), inset 0 0 10px rgba(56, 189, 248, 0.1);
 }
 
 /* Active state */
 .nav-link.active,
 .nav-link:focus {
-  color: var(--accent-color);
-  background: transparent;
-  box-shadow: none;
+  color: #fff;
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
 }
 
 /* Click state */
