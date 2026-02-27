@@ -104,7 +104,8 @@ a {
   align-items: center;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-item.dropdown:hover .nav-link {
   color: var(--accent-color);
   transform: translateY(-2px);
   background: rgba(56, 189, 248, 0.15);
