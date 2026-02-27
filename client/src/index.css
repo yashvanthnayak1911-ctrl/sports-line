@@ -57,13 +57,17 @@ a {
 .nav-brand {
   font-size: 1.6rem;
   font-weight: 900;
-  color: #fff;
   letter-spacing: 2px;
   text-transform: uppercase;
   font-family: var(--font-main);
   text-decoration: none;
   position: relative;
   transition: opacity 0.3s ease;
+  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
 .nav-brand:hover {
