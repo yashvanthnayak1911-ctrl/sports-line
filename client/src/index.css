@@ -94,32 +94,44 @@ a {
   letter-spacing: 1px;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
-  border: 1px solid rgba(56, 189, 248, 0.1);
+  border: 1px solid transparent;
   transition: all 0.3s ease;
-  background: rgba(56, 189, 248, 0.05);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: transparent;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
 }
 
-.nav-link:hover,
-.nav-item.dropdown:hover .nav-link {
+.nav-link:hover {
   color: var(--accent-color);
   transform: translateY(-2px);
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+/* Specific Glass Buttons (Cart, Settings) */
+.nav-glass-btn {
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  background: rgba(56, 189, 248, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-glass-btn:hover,
+.nav-item.dropdown:hover .nav-glass-btn {
   background: rgba(56, 189, 248, 0.15);
   border-color: rgba(56, 189, 248, 0.4);
   box-shadow: 0 0 15px rgba(56, 189, 248, 0.3), inset 0 0 10px rgba(56, 189, 248, 0.1);
+  text-shadow: none;
 }
 
 /* Active state */
 .nav-link.active,
 .nav-link:focus {
-  color: #fff;
-  background: var(--accent-color);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+  color: var(--accent-color);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
 }
 
 /* Click state */
