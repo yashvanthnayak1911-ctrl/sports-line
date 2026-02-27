@@ -80,9 +80,20 @@ a {
 }
 
 @media (max-width: 768px) {
+  .nav-brand {
+    font-size: 1.2rem;
+  }
+
   .nav-links {
-    gap: 0.5rem;
-    /* Shrink space between links on narrow screens */
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nav-link {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
   }
 }
 
@@ -175,7 +186,7 @@ a {
 
 .hero-title {
   font-family: var(--font-main);
-  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-size: clamp(2rem, 8vw, 6rem);
   font-weight: 900;
   margin-bottom: 1.5rem;
   line-height: 1.1;
@@ -206,13 +217,20 @@ a {
 /* Features Grid */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 2rem;
   padding: 4rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
   z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    padding: 2rem 1rem;
+    gap: 1rem;
+  }
 }
 
 .feature-item {
@@ -349,6 +367,13 @@ a {
   -webkit-text-fill-color: transparent;
 }
 
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
 /* Featured Section Divider */
 .section-divider {
   display: flex;
@@ -396,7 +421,7 @@ a {
 /* Product Grid */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
   gap: 2rem;
 }
 
@@ -883,6 +908,13 @@ textarea.form-control {
   padding-bottom: 4rem;
 }
 
+@media (max-width: 900px) {
+  .checkout-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
 .checkout-card,
 .order-card {
   background: var(--primary-bg);
@@ -890,6 +922,14 @@ textarea.form-control {
   border-radius: 0;
   padding: 3rem;
   box-shadow: none;
+}
+
+@media (max-width: 768px) {
+
+  .checkout-card,
+  .order-card {
+    padding: 1.5rem;
+  }
 }
 
 .order-card {
@@ -912,6 +952,13 @@ textarea.form-control {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .checkout-form .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
 
 .checkout-form .form-group {
