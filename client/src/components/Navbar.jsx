@@ -128,7 +128,7 @@ const Navbar = () => {
                                 <>
                                     <Link to="/login" className="dropdown-item">
                                         <span className="dropdown-icon">🔑</span>
-                                        Sign In
+                                        Login
                                     </Link>
                                     <Link to="/register" className="dropdown-item">
                                         <span className="dropdown-icon">📝</span>

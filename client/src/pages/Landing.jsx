@@ -34,7 +34,7 @@ const Landing = () => {
 
                     <div className="gateway-actions">
                         <Link to="/login" className="btn gateway-btn primary">
-                            Sign In to Account
+                            Login
                         </Link>
 
                         <div className="gateway-separator">
@@ -42,7 +42,7 @@ const Landing = () => {
                         </div>
 
                         <Link to="/register" className="btn gateway-btn secondary">
-                            Join the Collective
+                            Register
                         </Link>
                     </div>
 

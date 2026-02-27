@@ -39,7 +39,7 @@ const Login = () => {
             <Navbar />
             <div className="container">
                 <div className="form-container">
-                    <h1>Sign In</h1>
+                    <h1>Login</h1>
                     <form onSubmit={submitHandler}>
                         <div className="form-group">
                             <label className="form-label">Email Address</label>
