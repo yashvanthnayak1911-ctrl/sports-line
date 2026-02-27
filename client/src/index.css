@@ -1412,15 +1412,17 @@ textarea.form-control {
 }
 
 .gateway-btn.secondary {
-  background: transparent;
-  border: 1px solid var(--glass-border);
-  color: white;
+  background: white;
+  color: var(--primary-bg);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+  border: none;
 }
 
 .gateway-btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: white;
   transform: translateY(-3px);
+  background: var(--accent-color);
+  color: white;
+  box-shadow: 0 15px 40px rgba(56, 189, 248, 0.4);
 }
 
 .gateway-footer {
