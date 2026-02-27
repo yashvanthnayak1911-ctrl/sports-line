@@ -17,7 +17,8 @@
 
 body {
   font-family: var(--font-main);
-  background-color: var(--primary-bg);
+  background: radial-gradient(circle at 15% 50%, #0f172a 0%, #050505 50%, #000000 100%);
+  background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
