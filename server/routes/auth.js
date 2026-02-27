@@ -85,4 +85,20 @@ router.get('/users', async (req, res) => {
     }
 });
 
+// @desc    Force clear all users (Temporary route for testing)
+// @route   GET /api/auth/force-clear-db
+// @access  Public
+router.get('/force-clear-db', async (req, res) => {
+    try {
+        const result = await User.deleteMany({});
+        res.status(200).json({
+            message: `Success: ${result.deletedCount} users completely wiped from the live database.`,
+            instruction: "You can now return to the app and register your fresh Admin account."
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+});
+
 module.exports = router;
