@@ -155,25 +155,51 @@ const Register = () => {
                         </div>
 
                         {/* Developer Options for Admin testing */}
-                        <div style={{ marginTop: '3rem', paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
+                        <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
                             <button
                                 type="button"
                                 onClick={() => setShowDevOptions(!showDevOptions)}
-                                style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0 auto' }}
+                                style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    color: showDevOptions ? 'var(--accent-color)' : 'var(--text-secondary)',
+                                    fontSize: '0.85rem',
+                                    fontWeight: '500',
+                                    letterSpacing: '0.5px',
+                                    textTransform: 'uppercase',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.6rem',
+                                    margin: '0 auto',
+                                    transition: 'color 0.3s ease'
+                                }}
                             >
-                                <span>{showDevOptions ? '▼' : '▶'}</span> Developer Options
+                                <span style={{ fontSize: '0.7rem', transition: 'transform 0.3s ease', transform: showDevOptions ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span> DEVELOPER OPTIONS
                             </button>
 
                             {showDevOptions && (
-                                <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                                    <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                                <div style={{
+                                    marginTop: '1.5rem',
+                                    padding: '1.25rem',
+                                    background: 'rgba(56, 189, 248, 0.05)',
+                                    borderRadius: '12px',
+                                    border: '1px solid rgba(56, 189, 248, 0.2)',
+                                    animation: 'fadeIn 0.3s ease-out'
+                                }}>
+                                    <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', margin: 0, cursor: 'pointer', color: 'var(--accent-color)', fontWeight: '600', fontSize: '0.9rem', letterSpacing: '0.5px' }}>
                                         <input
                                             type="checkbox"
                                             checked={isAdmin}
                                             onChange={(e) => setIsAdmin(e.target.checked)}
-                                            style={{ width: 'auto' }}
+                                            style={{
+                                                width: '18px',
+                                                height: '18px',
+                                                cursor: 'pointer',
+                                                accentColor: 'var(--accent-color)'
+                                            }}
                                         />
-                                        Register as Admin (Testing environment only)
+                                        REGISTER AS ADMIN (TESTING ENVIRONMENT ONLY)
                                     </label>
                                 </div>
                             )}
